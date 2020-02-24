@@ -1,0 +1,51 @@
+----------------------------------------------------------------------
+      name:  <unnamed>
+       log:  X:\Data\Workdata\704236\quasi_market_segregation\download
+> _files\log.txt
+  log type:  text
+ opened on:  20 Feb 2020, 12:32:03
+
+. 
+. /* Databuild */
+. local databuild: dir "do_files\1_databuild" files "*.do", respectcas
+> e
+
+. foreach f of local databuild{
+  2.         di as red "Running: `f'"
+  3.         qui: do "do_files\1_databuild\\`f'"
+  4. }
+Running: 01_select_cohort.do
+Running: 02_parental_education.do
+Running: 03_gpa9.do
+Running: 04_enrollment.do
+Running: 05_application.do
+Running: 06_catchmentareas.do
+Running: 07_externaldata.do
+Running: 09_merge.do
+Running: 10_sampleselection.do
+
+. 
+. /* Analyses */
+. local analyses: dir "do_files\2_analysis" files "*.do", respectcase
+
+. foreach f of local analyses{
+  2.         di as red "Running: `f'"
+  3.         qui: do "do_files\2_analysis\\`f'"
+  4. }
+Running: 01_tab_sumstat.do
+Running: 02_figtab_GPA_segregation.do
+Running: 03_figtab_GPA_segregation_with_permutation.do
+Running: 04_tab_Duncan_Dissimilarity.do
+Running: 05_tab_hhi.do
+Running: 06_predict_graduation.do
+Running: 07_tab_placebo.do
+Running: 08_fig_applicants.do
+Running: 09_fig_dist_magnet_schools.do
+
+. log close
+      name:  <unnamed>
+       log:  X:\Data\Workdata\704236\quasi_market_segregation\download
+> _files\log.txt
+  log type:  text
+ closed on:  22 Feb 2020, 00:27:34
+----------------------------------------------------------------------

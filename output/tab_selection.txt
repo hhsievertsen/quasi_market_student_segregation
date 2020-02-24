@@ -1,0 +1,7 @@
+                                                 ;Students           ;Schools
+All students that enrolled 2003-2011             ; 235,319           ;155
+Irrelevant institutions                          ;  -10,373          ;-14
+Balanced panel                                   ;   -9,901          ;-24
+No school district data                          ;   -2,012          ;-2
+No 9th grade GPA                                 ;   -5,641;         0
+Analysis sample                                  ; 207,392 ( 88%)    ;115 ( 74%)
