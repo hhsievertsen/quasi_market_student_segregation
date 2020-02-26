@@ -1,0 +1,1 @@
+the do files in this folder implement estimation strategies with alternative weighting. The point estimates and precision are very similar to the main specification and the results are therefore not reported in the main manuscript. But the results are available in this folder.
