@@ -18,7 +18,7 @@ foreach var in post overall pre {
 	gen ratio=gym_app/gym_enr
 	bys enrollment_school_group foc_year: egen schools_in_district=sum(tagschools)
 	* aggregate on high school level
-	collapse (mean) gym_enr ratio foc_female foc_une foc_gpa foc_highgpa foc_par foc_age enrollment_competition_p50_20k schools_in_district ///
+	collapse (mean) gym_enr ratio foc_female foc_une foc_gpa foc_highgpa foc_par prirorities_used foc_age enrollment_competition_p50_20k schools_in_district ///
 			 (count) n=foc_gpa ///
 			 ,by(enrollment_i) fast
 	* labels
@@ -32,11 +32,12 @@ foreach var in post overall pre {
 	label var schools_in_district "Schools in district"
 	label var gym_enr "Enrollment"
 	label var ratio "1st priority/Enrolled"
+	label var prirorities_used "Priorities used"
 	* create table
 	cap file close f 
 	* write means and SD
-	file open f using "$df\tab_descriptive_statistics_`var'.csv",replace write
-		foreach var in foc_female foc_gpa foc_highgpa foc_par foc_age enrollment_competition_p50_20k  foc_une  schools_in_district gym_enr ratio{
+	file open f using "$df\tab_descriptive_statistics_`var'.txt",replace write
+		foreach var in prirorities_used foc_female foc_gpa foc_highgpa foc_par foc_age enrollment_competition_p50_20k  foc_une  schools_in_district gym_enr ratio{
 		qui: sum `var',
 		local v1: disp %10.2f r(mean)
 		local v2: disp %10.2f r(sd)

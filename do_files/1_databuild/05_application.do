@@ -6,6 +6,8 @@ do "X:\Data\Workdata\704236\quasi_market_segregation\do_files\settings.do"
 * Load data
 use "X:\Data\Workdata\704236\stataraw\stildata.dta", clear
 /* only keep first priority */
+* number of priorities
+bys pnr dwid_kalenderaar: gen prirorities_used=_N
 keep if prioritet=="1"
 /* only keep stx*/
 keep if til_udd=="Studentereksamen - stx"
@@ -13,7 +15,7 @@ keep if til_udd=="Studentereksamen - stx"
 destring til_institution,gen(instnr)
 rename dwid_kalenderaar year
 * keep variables we need
-keep pnr instnr year
+keep pnr instnr year prirorities_used
 * remove duplicates
 bys pnr: keep if _n==1
 * save

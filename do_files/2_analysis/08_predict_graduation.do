@@ -27,7 +27,7 @@ Drop out
 * elevregistet
 	 use "$rf\kotre2015.dta", clear
 	* Define High school programs
-	merge m:1 udd using "$formats\uddan_2013_udd.dta", keep(1 3) nogen
+	merge m:1 udd using "$ff\uddan_2013_udd.dta", keep(1 3) nogen
 	keep if inlist(M1TEKST,"Gymnasiet")
 	keep if udd==1199|udd==1189|udd==1179|udd==1899|udd==1894|udd==1895
 	drop M1TEKST h1 H1TEKST
@@ -158,9 +158,13 @@ use "$tf\dataforanalysis.dta",clear
 eststo clear
 eststo: reg graduated  gpa_std ,  cluster(instnr)
 eststo: reg graduated  gpa_std  i.instnr, cluster(instnr)
+sum graduated
+estadd scalar a=r(mean)
 eststo: reg gpa gpa_std, cluster(instnr)
 eststo: reg gpa gpa_std i.instnr, cluster(instnr)
-esttab using "$df\tab_predict_gpa.txt", stats(r2 N a) se  replace keep(gpa_std)
+sum gpa
+estadd scalar a=r(mean)
+esttab using "$df\tab_predict_gpa.txt", stats(r2 N a) se  replace keep(gpa_std) b(%6.5f)
 
 * schooling
 * run regression

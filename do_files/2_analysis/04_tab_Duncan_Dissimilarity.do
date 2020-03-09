@@ -31,12 +31,18 @@ syntax, var(string)
 	* pre
 	gen pre=foc_year<2007
 	* mean across groups
+	
 	gen dis_pre_low=dis if pre==1 & enrollment_c==0
 	gen dis_pre_high=dis if pre==1 & enrollment_c==1
 	gen dis_post_low=dis if pre==0 & enrollment_c==0
 	gen dis_post_high=dis if pre==0 & enrollment_c==1
+	drop dis
 	collapse (mean) dis*
-	gen did=(dis_post_high-dis_pre_high)-(dis_post_low-dis_pre_low)
+	gen dif_hig=(dis_post_high-dis_pre_high)
+	gen dif_low=(dis_post_low-dis_pre_low)
+	gen dif_pre=dis_pre_high-dis_pre_low
+	gen dif_post=dis_post_high-dis_post_low
+	gen did=dif_hig-dif_low
 	* output
 	xpose,clear varname
 	mkmat v1, matrix(output) rownames(_varname)
@@ -63,14 +69,14 @@ end
 	save "$tf\estimatesDuncan.dta",replace
 
 * loop over moment
-foreach var in mean p50 p25 p75{
+foreach var in  mean p50 p25 p75 {
 * loop over distance
 		foreach dist in 5 20{
 		* load data
 		use "$tf\analysisdata.dta",clear
 	
 		bootstrap _b , reps(200) cluster(enrollment_instnr)   : myprogram,  var(enrollment_competition_`var'_`dist'k)
-		esttab using "$df\tab_DuncanD_`var'_`dist'.txt", star(* 0.05) se replace
+		esttab using "$df\tab_DuncanD_`var'_`dist'.txt", star(* 0.05) se replace b(%6.5f)
 		* store
 		use "$tf\estimatesDuncan.dta",clear
 		replace beta=_b[did] if moment=="`var'" & dist==`dist'

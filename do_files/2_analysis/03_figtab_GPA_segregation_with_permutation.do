@@ -1,10 +1,10 @@
 * Project: quasi markets and school segregation
 * File: GPA segregation with permutations
-* Last edited: 18/2-2020 by HHS
+* Last edited: 26-2-2020 by HHS
 * load global settings
 do "X:\Data\Workdata\704236\quasi_market_segregation\do_files\settings.do"
 
-* Program for acutal R2 - permuted R2
+* Program for actual R2 - permuted R2
 cap program drop mypermut
 program mypermut,eclass
 syntax ,permutations(string)
@@ -87,15 +87,17 @@ syntax ,permutations(string)
 				qui: gen _r2_high1_`i'= r2_high1_`i'- r2_high1_`i'_permuted
 				}
 			keep _*
-			gen _dif_post=((_r2_high1_2007+_r2_high1_2008+_r2_high1_2009+_r2_high1_2010+_r2_high1_2011)/5)- ///
-						  ((_r2_high0_2007+_r2_high0_2008+_r2_high0_2009+_r2_high0_2010+_r2_high0_2011)/5)
-			gen _dif_pre =((_r2_high1_2003+_r2_high1_2004+_r2_high1_2005+_r2_high1_2006)/4)- ///
-						  ((_r2_high0_2003+_r2_high0_2004+_r2_high0_2005+_r2_high0_2006)/4) 
-			gen _dif_high=((_r2_high1_2007+_r2_high1_2008+_r2_high1_2009+_r2_high1_2010+_r2_high1_2011)/5)- ///
-						  ((_r2_high1_2003+_r2_high1_2004+_r2_high1_2005+_r2_high1_2006)/4)
-			gen _dif_low =((_r2_high0_2007+_r2_high0_2008+_r2_high0_2009+_r2_high0_2010+_r2_high0_2011)/5)- ///
-						  ((_r2_high0_2003+_r2_high0_2004+_r2_high0_2005+_r2_high0_2006)/4)
+			gen _pre_low=((_r2_high0_2003+_r2_high0_2004+_r2_high0_2005+_r2_high0_2006)/4) 
+			gen _post_low=((_r2_high0_2007+_r2_high0_2008+_r2_high0_2009+_r2_high0_2010+_r2_high0_2011)/5)
+			gen _pre_high=((_r2_high1_2003+_r2_high1_2004+_r2_high1_2005+_r2_high1_2006)/4)
+			gen _post_high=((_r2_high1_2007+_r2_high1_2008+_r2_high1_2009+_r2_high1_2010+_r2_high1_2011)/5)
+			gen _dif_post=_post_high-_post_low
+			gen _dif_pre =_pre_high-_pre_low ///
+						  
+			gen _dif_high=_post_high-_pre_high
+			gen _dif_low =_post_low-_pre_low
 			gen _dif_in_dif=_dif_post-_dif_pre
+			
 			xpose,clear varname
 			mkmat v1, matrix(output) rownames(_varname)
 			mat a=output'
@@ -136,7 +138,7 @@ use "$tf\analysisdata.dta",clear
 			use "$tf\analysisdata.dta",clear
 			replace enrollment_competition_p50_20k=enrollment_competition_`var'_`dist'k
 			bootstrap _b , reps(200) cluster(enrollment_instnr)  : mypermut, permutations(50)
-			esttab using "$df\tab_GPAsegregation_permuted_by_year_`var'_`dist'.txt", star(* 0.05) se replace
+			esttab using "$df\tab_GPAsegregation_permuted_by_year_`var'_`dist'.txt", b(%6.5f) star(* 0.05) se replace
 			* store estimates for bar chart
 			use "$tf\estimatesR2_by_year.dta",clear
 			replace beta=_b[_dif_in_dif] if moment=="`var'" & dist==`dist'
