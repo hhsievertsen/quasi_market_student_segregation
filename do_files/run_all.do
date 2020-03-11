@@ -9,11 +9,11 @@ cap log close
 log using "$df\log.txt", text replace
 
 /* Databuild */
-*local databuild: dir "do_files\1_databuild" files "*.do", respectcase
-*foreach f of local databuild{
-*	di as red "Running: `f'"
-	*qui: do "do_files\1_databuild\\`f'"
-*}
+local databuild: dir "do_files\1_databuild" files "*.do", respectcase
+foreach f of local databuild{
+	di as red "Running: `f'"
+	qui: do "do_files\1_databuild\\`f'"
+}
 
 /* Analyses */
 local analyses: dir "do_files\2_analysis" files "*.do", respectcase

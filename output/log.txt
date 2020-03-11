@@ -1,0 +1,47 @@
+----------------------------------------------------------------
+      name:  <unnamed>
+       log:  X:\Data\Workdata\704236\quasi_market_segregation\do
+> wnload_files\log.txt
+  log type:  text
+ opened on:   9 Mar 2020, 19:45:02
+
+. 
+. /* Databuild */
+. local databuild: dir "do_files\1_databuild" files "*.do", resp
+> ectcase
+
+. foreach f of local databuild{
+  2.         di as red "Running: `f'"
+  3.         qui: do "do_files\1_databuild\\`f'"
+  4. }
+Running: 01_select_cohort.do
+Running: 02_parental_education.do
+Running: 03_gpa9.do
+Running: 04_enrollment.do
+Running: 05_application.do
+Running: 06_catchmentareas.do
+Running: 07_externaldata.do
+Running: 09_merge.do
+Running: 10_sampleselection.do
+
+. 
+. /* Analyses */
+. local analyses: dir "do_files\2_analysis" files "*.do", respec
+> tcase
+
+. foreach f of local analyses{
+  2.         di as red "Running: `f'"
+  3.         qui: do "do_files\2_analysis\\`f'"
+  4. }
+Running: 01_tab_sumstat.do
+Running: 02_figtab_GPA_segregation_without_permuation.do
+Running: 03_figtab_GPA_segregation_with_permutation.do
+Running: 04_tab_Duncan_Dissimilarity.do
+Running: 05_tab_placebo.do
+Running: 06_fig_applicants.do
+Running: 07_fig_dist_magnet_schools.do
+Running: 08_predict_graduation.do
+
+. 
+end of do-file
+
