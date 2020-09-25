@@ -1,2 +1,3 @@
 # quasi_market_student_segregation
- replication files 
+This repository contains all replication files used for the project "QUASI-MARKET COMPETITION IN PUBLIC SERVICE PROVISION:
+USER SORTING AND CREAM SKIMMING"
