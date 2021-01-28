@@ -28,3 +28,4 @@ do "X:\Data\Workdata\704236\quasi_market_segregation\do_files\settings.do"
 * save
 	compress
 	save "$tf\gpa9.dta",replace
+

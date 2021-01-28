@@ -2,7 +2,7 @@
 * File: GPA segregation without permutations
 * Last edited: 25/2-2020 by HHS
 * load global settings
-do "X:\Data\Workdata\704236\quasi_market_segregation\do_files\settings.do"
+do "D:\Data\workdata\704236\xdrev\704236\quasi_market_segregation\do_files\settings.do"
 
 * Program for actual R2 - permuted R2
 cap program drop mypermut
@@ -74,7 +74,8 @@ save "$tf\estimatesR2_by_year_fortimechart_np.dta",replace
 * bootstrap
 use "$tf\analysisdata.dta",clear
 bootstrap _b , reps(200) cluster(enrollment_instnr)  : mypermut
-esttab using "$df\tab_GPAsegregation_notpermuted.txt", star(* 0.05) se replace
+esttab using "$df\tab_GPAsegregation_notpermuted.txt", star(* 0.05) se replace 
+esttab using "$df\tab_GPAsegregation_notpermutedpval.txt", star(* 0.05) p replace 
 * store estimates for line chart
 use "$tf\estimatesR2_by_year_fortimechart_np.dta",clear
 forval i=2003/2011{

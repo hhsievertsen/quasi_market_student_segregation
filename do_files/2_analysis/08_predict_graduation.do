@@ -3,7 +3,7 @@
 * Last edited: 18/2-2020 by HHS
 /* predict graduation*/
 * load preamble
-do "X:\Data\Workdata\704236\quasi_market_segregation\do_files\settings.do"
+do "D:\Data\workdata\704236\xdrev\704236\quasi_market_segregation\do_files\settings.do"
 /*************************************************************************
 High school GPA 
 **************************************************************************/
@@ -165,6 +165,7 @@ eststo: reg gpa gpa_std i.instnr, cluster(instnr)
 sum gpa
 estadd scalar a=r(mean)
 esttab using "$df\tab_predict_gpa.txt", stats(r2 N a) se  replace keep(gpa_std) b(%6.5f)
+esttab using "$df\tab_predict_gpap.txt", stats(r2 N a) p  replace keep(gpa_std) b(%6.5f)
 
 * schooling
 * run regression
@@ -175,3 +176,4 @@ eststo: reg graduated  schooling  i.instnr, cluster(instnr)
 eststo: reg gpa schooling, cluster(instnr)
 eststo: reg gpa schooling i.instnr, cluster(instnr)
 esttab using "$df\tab_predict_schooling.txt", stats(r2 N a) se  replace keep(schooling)
+esttab using "$df\tab_predict_schooling.txtp", stats(r2 N a) p  replace keep(schooling)

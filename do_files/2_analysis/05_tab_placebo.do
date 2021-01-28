@@ -2,7 +2,7 @@
 * File: GPA placebo reform in 2004
 * Last edited: 18/2-2020 by HHS
 * load global settings
-do "X:\Data\Workdata\704236\quasi_market_segregation\do_files\settings.do"
+do "D:\Data\workdata\704236\xdrev\704236\quasi_market_segregation\do_files\settings.do"
 
 * Program for acutal R2 - permuted R2
 cap program drop mypermut
@@ -108,5 +108,6 @@ timer on 1
 use "$tf\analysisdata.dta",clear
 bootstrap _b , reps(5) cluster(enrollment_instnr)  : mypermut, permutations(50)
 esttab using "$df\tab_placebo.txt", star(* 0.05) se replace b(%6.5f)
+esttab using "$df\tab_placebop.txt", star(* 0.05) p replace b(%6.5f)
 timer off 1
 timer list 1

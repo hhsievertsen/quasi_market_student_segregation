@@ -2,7 +2,7 @@
 * File: duncan dissimilarity
 * Last edited: 17/2-2020 by HHS
 * load global settings
-do "X:\Data\Workdata\704236\quasi_market_segregation\do_files\settings.do"
+do "D:\Data\workdata\704236\xdrev\704236\quasi_market_segregation\do_files\settings.do"
 
 * Define program
 cap program drop myprogram
@@ -77,6 +77,7 @@ foreach var in  mean p50 p25 p75 {
 	
 		bootstrap _b , reps(200) cluster(enrollment_instnr)   : myprogram,  var(enrollment_competition_`var'_`dist'k)
 		esttab using "$df\tab_DuncanD_`var'_`dist'.txt", star(* 0.05) se replace b(%6.5f)
+		esttab using "$df\tab_DuncanD_`var'_`dist'p.txt", star(* 0.05) p replace b(%6.5f)
 		* store
 		use "$tf\estimatesDuncan.dta",clear
 		replace beta=_b[did] if moment=="`var'" & dist==`dist'

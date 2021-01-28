@@ -2,7 +2,7 @@
 * File: GPA segregation with permutations
 * Last edited: 26-2-2020 by HHS
 * load global settings
-do "X:\Data\Workdata\704236\quasi_market_segregation\do_files\settings.do"
+do "D:\Data\workdata\704236\xdrev\704236\quasi_market_segregation\do_files\settings.do"
 
 * Program for actual R2 - permuted R2
 cap program drop mypermut
@@ -139,6 +139,7 @@ use "$tf\analysisdata.dta",clear
 			replace enrollment_competition_p50_20k=enrollment_competition_`var'_`dist'k
 			bootstrap _b , reps(200) cluster(enrollment_instnr)  : mypermut, permutations(50)
 			esttab using "$df\tab_GPAsegregation_permuted_by_year_`var'_`dist'.txt", b(%6.5f) star(* 0.05) se replace
+			esttab using "$df\tab_GPAsegregation_permuted_by_year_`var'_`dist'p.txt", b(%6.5f) star(* 0.05)  replace p
 			* store estimates for bar chart
 			use "$tf\estimatesR2_by_year.dta",clear
 			replace beta=_b[_dif_in_dif] if moment=="`var'" & dist==`dist'
@@ -184,5 +185,7 @@ tw (bar beta order if dist==5, barwidth(0.45) fcolor(gs2) lcolor(gs2) ) ///
 	drop if enrollment_instnr==.
 	bootstrap _b , reps(200) cluster(enrollment_instnr)  : mypermut, permutations(50)
 	esttab using "$df\tab_GPAsegregation_permuted_unbalanced_by_year.txt", star(* 0.05) se replace
+
+		esttab using "$df\tab_GPAsegregation_permuted_unbalanced_by_yearp.txt", star(* 0.05) p replace
 
 	
