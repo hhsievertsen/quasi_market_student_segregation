@@ -105,6 +105,11 @@ tw (bar beta order if dist==5, barwidth(0.45) fcolor(gs2) lcolor(gs2) ) ///
 	  graphregion(lcolor(white) fcolor(white)) ///
 	  yscale(noline) ylabel(0.0(0.02).11, nogrid angle(horizontal) format(%4.2f) noticks) ///
 	  xlab(1 "Median" 2 "P25" 3 "P75",noticks)  legend(order (1 "5km" 2 "20km") region(lcolor(white))) ///
-	  ytitle("DiD estimate") xtitle("") 
-	  graph export "$df\fig_alt_spec_Duncan.png",replace width("4000")
+	  ytitle("DiD estimate") xtitle("") ///
+	      title("Notes: The estimates are based on the Duncan Dissimilarity Index approach.  The lines show the " " 95 percent confidence intervals based on 200 bootstrap iterations clustered at the school level.", size(small) color(black) position(6) span ) ///
+	subtitle("Appendix Figure 1:  DiD  Dissimilarity Index" "estimates using alternative specifications", position(6) span margin(medium))
+   graph export "$df\appendix_figure1.png",replace width(5000)
+   graph export "$df\appendix_figure1.eps",replace 
+
+
 

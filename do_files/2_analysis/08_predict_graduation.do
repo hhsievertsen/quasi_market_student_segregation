@@ -126,13 +126,15 @@ forval i=1/50{
 }
 use "$tf\estimates.dta",clear
 
-tw  (rspike upper lower gpa, lcolor(black) lwidth(thin) ) ///
+gr tw  (rspike upper lower gpa, lcolor(black) lwidth(thin) ) ///
     (scatter graduated gpa, mcolor(black) msize(tiny)) ///
 	, plotregion(lcolor(white) fcolor(white)) ///
 	  graphregion(lcolor(white) fcolor(white)) ///
 	  yscale(noline) ylabel(0.0(0.25)1, nogrid angle(horizontal) format(%4.2f) noticks) ///
-	  xlab(-1(0.5)2) note("Note: Each marker shows the average for 2 percent of the observations, the spikes represent the coefficent +/-2* the standard error. " , size(tiny) ) ///
-	  xlab(,noticks)  legend(off) xtitle("9th grade GPA (mean=0, SD=1)") ytitle("=1 if graduated from high school")
+	  xlab(-1(0.5)2) ///
+	  xlab(,noticks)  legend(off) xtitle("9th grade GPA (mean=0, SD=1)") ytitle("=1 if graduated from high school" ) ///
+	   name(g1,replace) /// 
+	   title("(a) Ninth-grade GPA and" "high school graduation", pos(6) color(black) size(medium) margin(medium))
 	  graph export "$df\fig_grad_and_gpa.png",replace width("4000")
 
 /*************************************************************************
@@ -144,11 +146,13 @@ drop if n<10
 gen r=round(50*graduated)/50
 collapse (count) n=n, by(r)
 replace r=r*100
-tw (bar n r, fcolor(black) lcolor(black) barwidth(1)) , ///
+gr tw (bar n r, fcolor(black) lcolor(black) barwidth(1)) , ///
      plotregion(lcolor(white) fcolor(white)) ///
 	  graphregion(lcolor(white) fcolor(white)) ///
 	  xtitle("Graduated (in %)") ytitle("Number of schools") ///
-	  xlab(,nogrid noticks) ylab(,nogrid noticks angle(horizontal)) yscale(noline)
+	  xlab(,nogrid noticks) ylab(,nogrid noticks angle(horizontal)) yscale(noline) ///
+	  name(g2, replace) /// 
+	   title("(b) Distribution of graduation" "rates across institutions", pos(6) color(black) size(medium) margin(medium))
 	    graph export "$df\fig_hist_grad.png",replace width("4000")
 /*************************************************************************
 Regression:Performance and 9th grade GPA
@@ -177,3 +181,11 @@ eststo: reg gpa schooling, cluster(instnr)
 eststo: reg gpa schooling i.instnr, cluster(instnr)
 esttab using "$df\tab_predict_schooling.txt", stats(r2 N a) se  replace keep(schooling)
 esttab using "$df\tab_predict_schooling.txtp", stats(r2 N a) p  replace keep(schooling)
+
+
+* Combine charts
+graph combine g1 g2, subtitle("test")  graphregion(fcolor(white)) ///
+	      title("Notes: Graduation is defined as graduating within three years after enrollment in the same institution." "Non-graduation, therefore, includes students who move institution, students who take longer to graduate" " (possibly because of special programs), and students who drop out. All students who enrolled in an " " institution included in the main analysis in the years 2003 to 2006 are included. In Figure (a)  " " each marker shows the average graduation rate for two percent of the sample sorted by ninth-grade GPA, " " and the lines show the mean +/-2 times the standard error.", size(vsmall) color(black) position(6) span ) ///
+	subtitle("Appendix Figure 2: Variation in graduation rates", position(6) span margin(medium))
+	   graph export "$df\appendix_figure2.png",replace width(5000)
+   graph export "$df\appendix_figure2.eps",replace 

@@ -173,9 +173,12 @@ tw (bar beta order if dist==5, barwidth(0.45) fcolor(gs2) lcolor(gs2) ) ///
 	  graphregion(lcolor(white) fcolor(white)) ///
 	  yscale(noline) ylabel(0.0(0.02).08, nogrid angle(horizontal) format(%4.2f) noticks) ///
 	  xlab(1 "Median" 2 "P25" 3 "P75",noticks)  legend(order (1 "5km" 2 "20km") region(lcolor(white))) ///
-	  ytitle("DiD estimate") xtitle("") 
+	  ytitle("DiD estimate") xtitle("")  ///
+	      title("Notes: The estimates are based on the R-squared approach with 50 permuations.  The lines show the " " 95 percent confidence intervals based on 200 bootstrap iterations clustered at the school level.", size(small) color(black) position(6) span ) ///
+	subtitle("Figure 3:  DiD estimates using alternative specifications", position(6) span margin(medium))
 	  graph export "$df\fig_alt_spec_R2.png",replace width("4000")
-
+   graph export "$df\figure3.png",replace width(5000)
+   graph export "$df\figure3.eps",replace 
 
 
 /* Unbalanced Sample*/

@@ -82,16 +82,19 @@ forval i=2003/2011{
 	replace beta_low=_b[_r2_high0_`i'] if year==`i' 
 	replace beta_high=_b[_r2_high1_`i'] if year==`i' 
 }
-save "$tf\estimatesR2_by_year_fortimechart_np.dta",replace
-
+*save "$tf\estimatesR2_by_year_fortimechart_np.dta",replace
+use "$tf\estimatesR2_by_year_fortimechart_np.dta",clear
 tw (connected beta_high year, lcolor(black) mcolor(black) msymbol(S) lwidth(medthick))  ///
    (connected beta_low year, lcolor(gs6) mcolor(gs6) msymbol(X) msize(large) lwidth(medthick)) ///
    , ylab(0(0.01)0.08, noticks nogrid angle(horizontal) format(%4.2f)) ///
    xlab(2003(2)2011,noticks) yscale(noline)  xline(2006.5, lcolor(black) lpattern(dash)) ///
    ytitle("R-squared") xtitle("Year of enrollment") ///
    legend(order(1 "High concentration areas" 2 "Low concentration areas") region(lcolor(white)) position(12)) ///
-   graphregion(lcolor(white) fcolor(white)) plotregion(lcolor(white) fcolor(white))
+   graphregion(lcolor(white) fcolor(white)) plotregion(lcolor(white) fcolor(white)) ///
+    title("Notes: The connected lines are created as follows: For each year we regress ninth-grade GPA" " of enrollees on high school indicators, for low- and high-concentration areas, respectively." " The connected lines plot the R-squared from these regressions.", size(small) color(black) position(6) span ) ///
+	subtitle("Figure 2:  GPA segmentation 2003-2001", position(6) span margin(medium))
    graph export "$df\fig2_GPAsegregation.png",replace width(2000)
+   graph export "$df\figure2.png",replace width(5000)
 
 
 

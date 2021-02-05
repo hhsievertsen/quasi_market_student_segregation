@@ -115,6 +115,10 @@ tw (connected beta_high year, lcolor(black) mcolor(black) msymbol(S) lwidth(medt
    xlab(2003(2)2011,noticks) yscale(noline)  xline(2006.5, lcolor(black) lpattern(dash)) ///
    ytitle("R-squared") xtitle("Year of enrollment") ///
    legend(order(1 "High conc. enr." 2 "Low conc. enrol" 3 "High conc. appl." 4 "Low conc. appl.") region(lcolor(white)) position(12)) ///
-   graphregion(lcolor(white) fcolor(white)) plotregion(lcolor(white) fcolor(white))
-   graph export "$df\fig2_GPAsegregation_permute_with_appl.png",replace width(2000)
+   graphregion(lcolor(white) fcolor(white)) plotregion(lcolor(white) fcolor(white)) ///
+	      title("Notes: The connected lines are created as follows: First, for each year we regress ninth-grade GPA" "of enrollees/applicants on high school indicators, for low- and high-concentration areas, respectively, " " and save the R-squared Second, we randomly reallocate students to schools within the district, " "  keeping school size constant. For each randomized allocation of students, we  again regress " "ninth-grade GPA on high school indicators and save the R-squared. The connected lines plot the " "  difference  in the R-squared between the actual and the randomized allocation of students. ", size(small) color(black) position(6) span ) ///
+	subtitle("Figure 4: GPA segmentation in intake and applications 2003-2011", position(6) span margin(medium))
+	  graph export "$df\fig_alt_spec_R2.png",replace width("4000")
+   graph export "$df\figure4.png",replace width(5000)
+   graph export "$df\figure4.eps",replace 
 
