@@ -1,7 +1,3 @@
-# quasi_market_student_segregation
-This repository contains all replication files used for the project "QUASI-MARKET COMPETITION IN PUBLIC SERVICE PROVISION:
-USER SORTING AND CREAM SKIMMING"
-
 # Quasi-Market Competition in Public Service Provision: User Sorting and Cream Skimming
  
  
@@ -46,5 +42,5 @@ Using the personal identifier, we merged the data with data from  the Ministry o
 Using the variable on the municipality of residence we merged the data with the following three datasets from Statistics Denmark's public database (https://statistikbanken.dk/statbank5a/default.asp?w=1680): AARD, AULP01X, and AULP01,
 
 
-Please contact Hans H. Sievertsen if you have any questions regarding the data (h.h.sievertsen@bristol.ac.uk). The project ID at Statistics Denmark is 704784. 
+Please contact Hans H. Sievertsen if you have any questions regarding the data (h.h.sievertsen@bristol.ac.uk). The project ID at Statistics Denmark is 704236. 
 
