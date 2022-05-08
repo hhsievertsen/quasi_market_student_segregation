@@ -1,0 +1,158 @@
+---
+title: "DiD teaching example"
+subtitle: "based on 'Guul et al, (forthcoming)'" 
+author: "Hans H. Sievertsen"
+output: 
+  learnr::tutorial:
+  css: css/style.css
+runtime: shiny_prerendered
+---
+  
+```{r setup, include=FALSE}
+library(learnr)
+library(ggplot2)
+library(dplyr)
+library(aewr)
+
+knitr::opts_chunk$set(echo = FALSE,cache=FALSE)
+```   
+
+### Hi!
+
+This tutorial introduces a analysis Difference-in-Differences setting based on the study
+
+  
+
+[Sejr Guul, T., Hvidman, U., & Henrik Sievertsen, H. (2021) "Quasi-market competition in public service provision: User sorting and cream-skimming." Journal of Public Administration Research and Theory.](https://academic.oup.com/jpart/advance-article-abstract/doi/10.1093/jopart/muab002/6134454?redirectedFrom=fulltext)
+
+It is a "classic" example in the sense that there is one (eventually) treated group and one control group; and one pre period and one post period. Note that this tutorial is based on aggregated and adjusted data as we cannot share the microdata used in the paper. 
+
+### Files
+
+[The github repository for this paper](https://github.com/hhsievertsen/quasi_market_student_segregation) contains
+
+- All Stata do files used for the analysis in the paper.
+- The folder "teaching_example", which contains
+
+  * The aggregated data used in this tutorial:  [did_data.csv](https://github.com/hhsievertsen/quasi_market_student_segregation/raw/master/teaching_example/did_data.csv)
+  * The file *r_script.R* which basically contains the same code used in this tutorial.
+  * The file *stata_script.do* which mimics the analysis in this tutorial in Stata. 
+
+
+### Background
+
+In the paper we study how student segregation^[We use the term segregation to describe the segmentation of students by middle school grade point average (GPA) across high school institutions. In the extreme case all high GPA students will go to one high school and all low GPA students will go to a different high school. After the reform the high schools will get funding based on the number of students enrolled, and our hypothesis is that marginal costs are decreasing in enrollment GPA. The reform therefore gives institutions an incentive to attract students with higher GPA and schools with more market power (more applicants) might use that to attract these students.] across high schools was affected by a high school financing reform in 2007. The treated group covers districts with a high concentration of schools (i.e. more competition). The control group covers districts with a low concentration of schools (i.e. low competition). The outcome used in this tutorial is a measure of segregation in terms of the R-squared from regressing middle school grade point average on high school dummies. A higher R-squared means that a larger part of the variation in students intake GPA can be explained by simply knowing the high school the student attends, which we use as a measure of segregation. In other words: larger values mean more segregation. In the paper we also consider an alternative measures of segregation in terms of the Duncan Index of Dissimilarity.
+
+
+
+### The data
+
+The study is based on confidential individual level data. We cannot share these data, and were are here therefore only sharing the aggregated annual averages. You can download the dataset  [here](https://github.com/hhsievertsen/quasi_market_student_segregation/raw/master/teaching_example/did_data.csv). The variables are
+
+- *year*: the year of enrollment
+- *segregation*: a measure of segregation. Larger values mean more segregation. 
+- *type*: either "Control" or "Treated"
+
+In the study we also use a randomisation adjustment to account for systematic differences across regions. See the paper for further details [here](https://github.com/hhsievertsen/hhsievertsen.github.io/raw/master/mat/accepted/2021_JPART.pdf). 
+
+
+### A Dif-in-Dif Chart
+
+We start our analysis by looking at our outcome over time across Treated and Control regions. The code below creates a basic chart, but you can click "hint" to get the code for a more polished chart.  
+
+```{r prep1}
+df<-didex%>%filter(scenario=="Actual")%>%select(-scenario,-realigned,-X6,-X7)
+```
+
+```{r ch1-chart1, exercise=TRUE,  warning=FALSE, message=FALSE,exercise.setup = "prep1"}
+# Create DiD plot
+ggplot(df,aes(x=year,y=segregation,color=type))+
+     geom_line()+
+     geom_point()
+
+```
+```{r ch1-chart1-hint-1}
+# Create DiD plot
+ggplot(df,aes(x=year,y=segregation,color=type))+
+     geom_line()+
+     geom_point()+
+     theme_minimal()+
+     labs(x=" ", y="Segregation", colour=" ")+
+     theme(legend.position = "top")+
+     geom_vline(xintercept=2006.5, linetype="dashed")+
+     ylim(0,0.07)+
+     scale_x_continuous(breaks=seq(2003,2011,2),labels=seq(2003,2011,2))
+
+```
+
+This chart corresponds to Figure 4 in the [paper](https://github.com/hhsievertsen/hhsievertsen.github.io/raw/master/mat/accepted/2021_JPART.pdf), except that we don't show the lines for the applications here. Figure 2 in the paper is based on the unadjusted values. 
+
+### Comparing means
+
+As this is an example of a simple Difference-in-Difference with only two periods and two groups, we can obtain our Difference-in-Differences estimate by comparing means. In the code below we calculate and print the mean of the outcome variable before treatment in the control group. You can adjust the code to get the means for the other groups and to calculate the Difference-in-Differences (or click "hint").
+
+```{r ch1-chart2, exercise=TRUE,  warning=FALSE, message=FALSE,exercise.setup = "prep1"}
+# Calculate mean of pre treatment control
+mean_pre_control=colMeans(df%>%filter(year<2007,type=="Control")%>%select(segregation))
+print(paste("Mean of y before treatment in control group",mean_pre_control))
+
+```
+```{r ch1-chart2-hint-1}
+mean_pre_control=colMeans(df%>%filter(year<2007,type=="Control")%>%select(segregation))
+mean_pre_treated=colMeans(df%>%filter(year<2007,type=="Treated")%>%select(segregation))
+mean_post_control=colMeans(df%>%filter(year>=2007,type=="Control")%>%select(segregation))
+mean_post_treated=colMeans(df%>%filter(year>=2007,type=="Treated")%>%select(segregation))
+print(paste("Difference in y post: ",(mean_post_treated-mean_post_control)))
+print(paste("Difference in y pre: ",(mean_pre_treated-mean_pre_control)))
+print(paste("Difference-in-Differences: ",(mean_post_treated-mean_post_control)-(mean_pre_treated-mean_pre_control) ))
+
+```
+
+You can compare the values to the values in Table 2 in the [paper](https://github.com/hhsievertsen/hhsievertsen.github.io/raw/master/mat/accepted/2021_JPART.pdf).
+
+### Regression approach
+
+We can also get the Difference-in-Differences estimate by means of a regression approach. We first prepare the data. We need to 
+
+1. Create an indicator for the "Post" period.
+2. Create an indicator for the "Treated" period.
+3. Create an indicator capturing the interaction between "Post" and "Treated".
+
+
+
+```{r ch1-chart3, exercise=TRUE,  warning=FALSE, message=FALSE,exercise.setup = "prep1"}
+# Create the Post indicator
+df<-df%>%mutate(Post=ifelse(year>2006,1,0))
+# Print first 6 rows of the data
+head(df)
+```
+```{r ch1-chart3-hint-1}
+# Create all indicators
+df<-df%>%mutate(Post=ifelse(year>2006,1,0),              # Post indicator
+                Treated=ifelse(type=="Treated",1,0),     # Treated indicator
+                PostXTreated=Post*Treated)               # Interaction term
+# Print first 6 rows of the data
+head(df)
+```
+
+
+We now use `lm()` to estimate the model with ordinary least squares.
+
+```{r prep2}
+df<-didex%>%filter(scenario=="Actual")%>%select(-scenario,-realigned,-X6,-X7)%>%mutate(Post=ifelse(year>2006,1,0),              # Post indicator
+                Treated=ifelse(type=="Treated",1,0),     # Treated indicator
+                PostXTreated=Post*Treated)               # Interaction term
+```
+
+
+```{r ch1-chart4, exercise=TRUE,  warning=FALSE, message=FALSE,exercise.setup = "prep2"}
+# Estimate model
+regresults<-lm(segregation~Treated+Post+PostXTreated,data=df)
+# Print results
+summary(regresults)
+```
+
+You can compare the values to the values in Table 2 in the [paper](https://github.com/hhsievertsen/hhsievertsen.github.io/raw/master/mat/accepted/2021_JPART.pdf). Note that the standard errors will be different, as we report bootstrap standard errors in the paper to account for the randomisation adjustment. 
+
+
+That's all folks. Please send feedback to h.h.sievertsen@bristol.ac.uk 
