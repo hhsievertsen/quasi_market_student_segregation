@@ -1,8 +1,8 @@
 # Quasi-Market Competition in Public Service Provision: User Sorting and Cream Skimming
  
  
-This repository contains the replication files for the paper "Quasi-Market Competition in Public Service Provision: User Sorting and Cream Skimming
- "  by Guul, Hvidman,  and Sievertsen.
+This repository contains the replication files for the paper ["Quasi-Market Competition in Public Service Provision: User Sorting and Cream Skimming
+ "  by Guul, Hvidman,  and Sievertsen.](https://academic.oup.com/jpart/advance-article-abstract/doi/10.1093/jopart/muab002/6134454?redirectedFrom=fulltext&login=false)
 
 ### Contents
 
